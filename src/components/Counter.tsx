@@ -17,10 +17,12 @@ export class Counter extends React.Component<IProps,IState>  {
         isLoading: false
     }
 
-    handleChangeCounter(value: 1 | -1){
-        this.setState(prevState =>({
-            counter: prevState.counter + value
-        }))
+    constructor(props: IProps){
+        super(props);
+
+
+        this.handleMinus = this.handleMinus.bind(this)
+        this.handlePlus = this.handlePlus.bind(this)
     }
 
     async componentDidMount(): Promise<void> {
@@ -48,6 +50,19 @@ export class Counter extends React.Component<IProps,IState>  {
         window.removeEventListener('resize',this.handleResize)
     }
 
+    handlePlus(){
+        this.setState(prevState =>({
+            counter: prevState.counter + 1
+        }))
+    }
+
+    handleMinus(){
+        this.setState(prevState =>({
+            counter: prevState.counter - 1
+        }))
+    }
+
+
     render(): React.ReactNode {
         return (
             
@@ -57,10 +72,10 @@ export class Counter extends React.Component<IProps,IState>  {
 
 
                 <div className="space-x-1">
-                    <Button onClick={() => this.handleChangeCounter(1)}>+</Button>
-                    <Button onClick={() => this.handleChangeCounter(-1)}>-</Button>
+                    <Button onClick={this.handlePlus}>+</Button>
+                    <Button onClick={this.handleMinus}>-</Button>
                 </div>
-            </Card>
+            </Card>  
         )
     }
 }
