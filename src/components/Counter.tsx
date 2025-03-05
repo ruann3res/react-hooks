@@ -1,9 +1,11 @@
 import React from "react";
 import { Card } from "@/components/Card";
 import { Button } from "@/components/ui/button"
+import { withAuthorization } from "@/hocs/withAuthorization";
 
 interface IProps {
-   title: string
+    title: string
+    userRole: string
 }
 
 interface IState {
@@ -11,13 +13,13 @@ interface IState {
     isLoading: boolean
 }
 
-export class Counter extends React.Component<IProps,IState>  {
+class CounterComponent extends React.Component<IProps, IState> {
     state: Readonly<IState> = {
         counter: 0,
         isLoading: false
     }
 
-    constructor(props: IProps){
+    constructor(props: IProps) {
         super(props);
 
 
@@ -26,13 +28,13 @@ export class Counter extends React.Component<IProps,IState>  {
     }
 
     async componentDidMount(): Promise<void> {
-        this.setState({isLoading: true}) 
+        this.setState({ isLoading: true })
 
         window.addEventListener('resize', this.handleResize)
 
-        await new Promise(resolve => setTimeout(resolve,2000));
+        await new Promise(resolve => setTimeout(resolve, 1));
 
-        this.setState({isLoading: false})
+        this.setState({ isLoading: false })
     }
 
     componentDidUpdate(_prevProps: Readonly<IProps>, prevState: Readonly<IState>,): void {
@@ -42,30 +44,29 @@ export class Counter extends React.Component<IProps,IState>  {
         })
     }
 
-    handleResize(){
+    handleResize() {
         console.log('Window resize')
     }
 
     componentWillUnmount(): void {
-        window.removeEventListener('resize',this.handleResize)
+        window.removeEventListener('resize', this.handleResize)
     }
 
-    handlePlus(){
-        this.setState(prevState =>({
+    handlePlus() {
+        this.setState(prevState => ({
             counter: prevState.counter + 1
         }))
     }
 
-    handleMinus(){
-        this.setState(prevState =>({
+    handleMinus() {
+        this.setState(prevState => ({
             counter: prevState.counter - 1
         }))
     }
 
-
     render(): React.ReactNode {
+
         return (
-            
             <Card title="Contador">
                 {this.state.isLoading && <h1>Carregando..'</h1>}
                 <h1 className="text-2xl mb-2">Valor atual: {this.state.counter}</h1>
@@ -75,7 +76,9 @@ export class Counter extends React.Component<IProps,IState>  {
                     <Button onClick={this.handlePlus}>+</Button>
                     <Button onClick={this.handleMinus}>-</Button>
                 </div>
-            </Card>  
+            </Card>
         )
     }
 }
+
+export const Counter = withAuthorization(CounterComponent, ['admin']);
