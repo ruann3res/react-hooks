@@ -2,6 +2,7 @@ import React from "react";
 import { Card } from "@/components/Card";
 import { Button } from "@/components/ui/button"
 import { withAuthorization } from "@/hocs/withAuthorization";
+import { VisibilityControllerComponent } from "./VisibilityController";
 
 interface IProps {
     title: string
@@ -69,8 +70,17 @@ class CounterComponent extends React.Component<IProps, IState> {
         return (
             <Card title="Contador">
                 {this.state.isLoading && <h1>Carregando..'</h1>}
-                <h1 className="text-2xl mb-2">Valor atual: {this.state.counter}</h1>
 
+                <VisibilityControllerComponent>
+                    {({isVisible,toggle}) => (
+                        <div className="mb-10">
+                            <h1 className="text-2xl mb-2">Saldo atual: {isVisible ? this.state.counter : '******'}</h1>
+                            <Button onClick={toggle}>
+                                {isVisible ? 'Esconder Saldo' : 'Mostrar Saldo'}
+                                </Button>
+                        </div>
+                    )}
+                </VisibilityControllerComponent>
 
                 <div className="space-x-1">
                     <Button onClick={this.handlePlus}>+</Button>
